@@ -16,6 +16,10 @@ div.main-content {
     overflow: hidden;
 }
 
+.main-content h1 {
+    margin: 30px 15px;
+}
+
 .navbar {
     background-color: midnightblue;
 }
@@ -32,6 +36,22 @@ div.main-content {
 
 .to-right {
     float: right;
+}
+
+.prod-list {
+    background-color: red;
+    display: flex;
+    flex-flow: wrap;
+    width: 100%;
+}
+
+.prod-list-elem {
+    background-color: yellow;
+    width: 500px;
+    max-width: 30%;
+    height: 700px;
+    align-self: center;
+    margin: auto;
 }
 
 footer {
