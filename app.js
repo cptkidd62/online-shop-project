@@ -16,6 +16,12 @@ app.get("/", (req, res) => {
     res.render("index", { prods: { items: data } });
 });
 
+app.get("/games", (req, res) => {
+    var repo = new dbrepo.Repository();
+    var data = repo.retrieve();
+    res.render("view-all", { prods: { items: data } });
+});
+
 app.use((req, res) => {
     res.render("404", { url: req.url });
 });

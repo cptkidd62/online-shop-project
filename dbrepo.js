@@ -32,6 +32,14 @@ exports.Repository = class Repository {
             year: 2021,
             developer: "Dev 1",
         },
+        {
+            id: 5,
+            name: "Game 5",
+            price: 200.0,
+            img: "no-img.jpg",
+            year: 2023,
+            developer: "Dev 2",
+        },
     ]
 
     retrieve() {
