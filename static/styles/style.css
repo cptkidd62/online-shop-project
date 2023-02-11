@@ -6,14 +6,13 @@ body {
     margin: auto;
     width: 100%;
     max-width: 1400px;
-    overflow: hidden;
+    height: 100%;
 }
 
 div.main-content {
     background-color: blueviolet;
     display: flex;
     flex-flow: column;
-    overflow: hidden;
 }
 
 .main-content h1 {
@@ -49,9 +48,10 @@ div.main-content {
     background-color: yellow;
     width: 500px;
     max-width: 30%;
-    height: 700px;
+    height: 500px;
     align-self: center;
     margin: auto;
+    margin-top: 20px;
 }
 
 .prod-list-elem img {
