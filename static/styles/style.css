@@ -6,13 +6,14 @@ body {
     margin: auto;
     width: 100%;
     max-width: 1400px;
-    height: 100%;
+    height: 100vh;
 }
 
 div.main-content {
     background-color: blueviolet;
     display: flex;
     flex-flow: column;
+    flex: 1;
 }
 
 .main-content h1 {
@@ -52,6 +53,7 @@ div.main-content {
     align-self: center;
     margin: auto;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .prod-list-elem img {
