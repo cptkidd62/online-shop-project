@@ -48,15 +48,15 @@ div.main-content {
     background-color: yellow;
     width: 500px;
     max-width: 30%;
-    height: 500px;
+    height: 600px;
     align-self: center;
     margin: auto;
     margin-top: 20px;
 }
 
 .prod-list-elem img {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: auto;
 }
 
 footer {
