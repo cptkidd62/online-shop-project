@@ -12,7 +12,7 @@ app.use(express.static("static"));
 
 app.get("/", (req, res) => {
     var repo = new dbrepo.Repository();
-    var data = repo.retrieve()
+    var data = repo.retrieveRandom(3)
     res.render("index", { prods: { items: data } });
 });
 
