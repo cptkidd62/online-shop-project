@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 
+const dbrepo = require("./dbrepo")
+
 const app = express();
 
 app.set("views", path.join(__dirname, "views"));
@@ -9,7 +11,9 @@ app.set("view engine", "ejs");
 app.use(express.static("static"));
 
 app.get("/", (req, res) => {
-    res.render("index");
+    var repo = new dbrepo.Repository();
+    var data = repo.retrieve()
+    res.render("index", { prods: { items: data } });
 });
 
 app.use((req, res) => {

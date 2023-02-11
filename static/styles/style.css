@@ -54,6 +54,11 @@ div.main-content {
     margin: auto;
 }
 
+.prod-list-elem img {
+    width: 40px;
+    height: 40px;
+}
+
 footer {
     background-color: beige;
 }
