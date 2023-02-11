@@ -1,4 +1,39 @@
 body {
     background-color: lightsalmon;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    flex-flow: column;
+    margin: auto;
+    width: 100%;
+    max-width: 1400px;
+    overflow: hidden;
+}
+
+div.main-content {
+    background-color: blueviolet;
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+}
+
+.navbar {
+    background-color: midnightblue;
+}
+
+.header-link {
+    color: limegreen;
+    text-decoration: none;
+    margin: 20px;
+}
+
+.to-left {
+    float: left;
+}
+
+.to-right {
+    float: right;
+}
+
+footer {
+    background-color: beige;
 }
