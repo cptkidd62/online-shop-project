@@ -27,6 +27,11 @@ app.get("/games", (req, res) => {
     res.render("view-all", { prods: { items: data } });
 });
 
+app.get("/games/:id", (req, res) => {
+    var data = repo.retrieveByID(Number(req.params.id));
+    res.render("view-details", { item: data });
+});
+
 app.use((req, res) => {
     res.render("404", { url: req.url });
 });

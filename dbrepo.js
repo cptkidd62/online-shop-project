@@ -46,6 +46,16 @@ exports.Repository = class Repository {
         return this.data;
     }
 
+    retrieveByID(id) {
+        let val = null;
+        this.data.forEach(e => {
+            if (e.id == id) {
+                val = e;
+            }
+        });
+        return val;
+    }
+
     retrieveRandom(n) {
         var res = [];
         var vals = [];
