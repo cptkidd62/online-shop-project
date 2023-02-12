@@ -42,6 +42,30 @@ exports.Repository = class Repository {
         },
     ]
 
+    users = [
+        {
+            id: 1,
+            login: "kasia_p",
+            pwd: "abcd",
+            user: true,
+            admin: false,
+        },
+        {
+            id: 2,
+            login: "admin_marcin",
+            pwd: "admin",
+            user: true,
+            admin: true,
+        },
+        {
+            id: 3,
+            login: "wiola_jola",
+            pwd: "1234",
+            user: true,
+            admin: false,
+        },
+    ]
+
     retrieve() {
         return this.data;
     }
@@ -80,5 +104,15 @@ exports.Repository = class Repository {
             res.push(this.data[v]);
         }
         return res;
+    }
+
+    getPasswordForUsr(login) {
+        let pwd = null;
+        this.users.forEach(u => {
+            if (u.login == login) {
+                pwd = u.pwd;
+            }
+        });
+        return pwd;
     }
 }
