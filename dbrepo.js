@@ -46,21 +46,21 @@ exports.Repository = class Repository {
         {
             id: 1,
             login: "kasia_p",
-            pwd: "abcd",
+            pwd: "$2a$12$83ns15HSLmOQ2ZXLiUj5.OyMvfNn5wAOCnzw7OT269RSkZr9nE2Ie", //abcd
             user: true,
             admin: false,
         },
         {
             id: 2,
             login: "admin_marcin",
-            pwd: "admin",
+            pwd: "$2a$12$SJaCjXT57V7JK9EUGj0jCeTwz4clTgS8k2Ukzbmzw.Zhc5EQehME2", //admin
             user: true,
             admin: true,
         },
         {
             id: 3,
             login: "wiola_jola",
-            pwd: "1234",
+            pwd: "$2a$12$pLLJLLSm80PJfnjNwvASm.TcXjulD2K0bop0bl4ZE.AYGxKGRR1Jq", //1234
             user: true,
             admin: false,
         },

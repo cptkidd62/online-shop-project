@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 
 const dbrepo = require("./dbrepo")
 
@@ -77,13 +78,13 @@ app.get("/login", (req, res) => {
     res.render("login", { user: req.signedCookies.user });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
     var login = req.body.txtlogin;
     var pwd = req.body.txtpwd;
-    var corrPwd = repo.getPasswordForUsr(login)
-    if (corrPwd == null) {
+    var pwdHash = repo.getPasswordForUsr(login)
+    if (pwdHash == null) {
         res.render("login", { msg: "Błędny login", user: req.signedCookies.user });
-    } else if (pwd == corrPwd) {
+    } else if (await bcrypt.compare(pwd, pwdHash)) {
         res.cookie("user", repo.getUsr(login), { maxAge: 1800000, signed: true });
         if (req.query.returnUrl) {
             res.redirect(req.query.returnUrl);
