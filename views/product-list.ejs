@@ -1,13 +1,15 @@
 <div class="prod-list">
     <% items.forEach( item=> { %>
         <div class="prod-list-elem">
-            <img src="/img/<%= item.img %>" alt="img">
-            <h3>
-                <%= item.name %>
-            </h3>
-            <h3>
-                <%= item.price %>PLN
-            </h3>
+            <a href="/games/<%= item.id %>/">
+                <img src="/img/<%= item.img %>" alt="img">
+                <h3>
+                    <%= item.name %>
+                </h3>
+                <h3>
+                    <%= item.price %>PLN
+                </h3>
+            </a>
         </div>
         <% }) %>
 </div>

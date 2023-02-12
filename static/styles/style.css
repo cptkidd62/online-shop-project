@@ -45,6 +45,13 @@ div.main-content {
     width: 100%;
 }
 
+.prod-list a {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    color: black;
+}
+
 .prod-list-elem {
     background-color: yellow;
     width: 500px;
