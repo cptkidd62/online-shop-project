@@ -84,7 +84,7 @@ app.post("/login", (req, res) => {
     if (corrPwd == null) {
         res.render("login", { msg: "Błędny login", user: req.signedCookies.user });
     } else if (pwd == corrPwd) {
-        res.cookie("user", repo.getUsr(login), { maxAge: 900000, signed: true });
+        res.cookie("user", repo.getUsr(login), { maxAge: 1800000, signed: true });
         if (req.query.returnUrl) {
             res.redirect(req.query.returnUrl);
         } else {
