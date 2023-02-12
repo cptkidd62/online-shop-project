@@ -23,7 +23,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/games", (req, res) => {
-    var data = repo.retrieve();
+    var data = [];
+    if (req.query.search) {
+        data = repo.retrieveBySearch(req.query.search);
+    } else {
+        data = repo.retrieve();
+    }
     res.render("view-all", { prods: { items: data } });
 });
 

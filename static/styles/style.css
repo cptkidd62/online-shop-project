@@ -22,6 +22,16 @@ div.main-content {
 
 .navbar {
     background-color: midnightblue;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.navbar div {
+    margin: auto 1px;
+    background-color: coral;
+    align-self: center;
+    width: 50%;
 }
 
 .header-link {
@@ -45,7 +55,7 @@ div.main-content {
     width: 100%;
 }
 
-.prod-list a {
+.prod-list-elem a {
     padding: 0;
     margin: 0;
     text-decoration: none;

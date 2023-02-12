@@ -56,6 +56,17 @@ exports.Repository = class Repository {
         return val;
     }
 
+    retrieveBySearch(txt) {
+        var res = [];
+        this.data.forEach(e => {
+            if (e.name.toLowerCase().includes(txt.toLowerCase()) ||
+                e.developer.toLowerCase().includes(txt.toLowerCase())) {
+                res.push(e);
+            }
+        });
+        return res;
+    }
+
     retrieveRandom(n) {
         var res = [];
         var vals = [];

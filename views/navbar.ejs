@@ -1,7 +1,13 @@
 <header class="navbar">
     <a class="header-link to-left" href="http://localhost:3000/">Strona główna</a>
     <a class="header-link to-left" href="http://localhost:3000/games/">Produkty</a>
-    <a class="header-link to-right" href="http://localhost:3000/cart/">Koszyk</a>
-    <a class="header-link to-right" href="http://localhost:3000/login/">Zaloguj się</a>
+    <div>
+        <form action="/games" method="get">
+            <input type="text" name="search" id="search">
+            <input type="submit" value="Szukaj">
+        </form>
+    </div>
     <a class="header-link to-right" href="http://localhost:3000/my-account/">Moje konto</a>
+    <a class="header-link to-right" href="http://localhost:3000/login/">Zaloguj się</a>
+    <a class="header-link to-right" href="http://localhost:3000/cart/">Koszyk</a>
 </header>
