@@ -17,6 +17,34 @@ app.use(express.urlencoded({
     extended: true
 }));
 
+function isUser(usr) {
+    return usr.user;
+}
+
+function isAdmin(usr) {
+    return usr.admin;
+}
+
+function authorize(role) {
+    return function(req, res, next) {
+        if (req.signedCookies.user) {
+            if (role == "admin") {
+                if (isAdmin(req.signedCookies.user)) {
+                    return next();
+                }
+            } else if (role == "user") {
+                if (isUser(req.signedCookies.user)) {
+                    return next();
+                }
+            }
+            console.log("Błąd autoryzacji - niewystarczające uprawnienia dostępu");
+            res.redirect("/");
+        } else {
+            res.redirect("/login?returnUrl="+req.url);
+        }
+    }
+}
+
 app.use((req, res, next) => {
     repo = new dbrepo.Repository();
     next();
@@ -56,7 +84,7 @@ app.post("/login", (req, res) => {
     if (corrPwd == null) {
         res.render("login", { msg: "Błędny login", user: req.signedCookies.user });
     } else if (pwd == corrPwd) {
-        res.cookie("user", { login: login }, { maxAge: 900000, signed: true });
+        res.cookie("user", repo.getUsr(login), { maxAge: 900000, signed: true });
         if (req.query.returnUrl) {
             res.redirect(req.query.returnUrl);
         } else {
@@ -72,21 +100,21 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-app.get("/my-account", (req, res) => {
+app.get("/my-account", authorize("user"), (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
     res.render("my-account", { user: req.signedCookies.user });
 });
 
-app.get("/cart", (req, res) => {
+app.get("/cart", authorize("user"), (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
     res.render("cart", { user: req.signedCookies.user });
 });
 
-app.get("/admin", (req, res) => {
+app.get("/admin", authorize("admin"), (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }

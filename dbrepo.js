@@ -115,4 +115,14 @@ exports.Repository = class Repository {
         });
         return pwd;
     }
+
+    getUsr(login) {
+        let usr = null;
+        this.users.forEach(u => {
+            if (u.login == login) {
+                usr = u;
+            }
+        });
+        return usr;
+    }
 }
