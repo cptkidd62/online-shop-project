@@ -72,6 +72,27 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/my-account", (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    res.render("my-account", { user: req.signedCookies.user });
+});
+
+app.get("/cart", (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    res.render("cart", { user: req.signedCookies.user });
+});
+
+app.get("/admin", (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    res.render("admin-panel", { user: req.signedCookies.user });
+});
+
 app.use((req, res) => {
     res.render("404", { url: req.url });
 });
