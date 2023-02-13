@@ -39,6 +39,20 @@ exports.Repository = class Repository {
         return data.rows;
     }
 
+    async createGame(name, img_name, developer, description, price, year) {
+        await this.pool.query("INSERT INTO games (name, img_name, developer, description, price, year) VALUES ($1, $2, $3, $4, $5, $6)",
+            [name, img_name, developer, description, price, year]);
+    }
+
+    async updateGame(id, name, img_name, developer, description, price, year) {
+        await this.pool.query("UPDATE games SET name = $1, img_name = $2, developer = $3, description = $4, price = $5, year = $6 WHERE id = $7",
+            [name, img_name, developer, description, price, year, id]);
+    }
+
+    async deleteGame(id) {
+        await this.pool.query("DELETE FROM games WHERE id = $1", [id]);
+    }
+
     async getPasswordForUsr(login) {
         var data = await this.pool.query("SELECT pwdhash FROM users WHERE login = $1", [login]);
         console.log(data.rows);

@@ -64,6 +64,18 @@ function authorizeOrder() {
     }
 }
 
+function validateImg(img) {
+    return /^[^<>:;,?"*|/]+$/.test(img);
+}
+
+function validatePrice(price) {
+    return price >= 0;
+}
+
+function validateYear(year) {
+    return year >= 1900;
+}
+
 app.use((req, res, next) => {
     repo = new dbrepo.Repository();
     next();
@@ -229,6 +241,35 @@ app.get("/admin/users", authorize("admin"), async (req, res) => {
     }
     var usrs = await repo.getUsrs();
     res.render("admin-users", { user: req.signedCookies.user, usrs: usrs, cart: req.signedCookies.cart });
+});
+
+app.get("/admin/edit", authorize("admin"), (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    res.render("edit-game", { user: req.signedCookies.user, cart: req.signedCookies.cart });
+});
+
+app.post("/admin/edit", authorize("admin"), async (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    if (!req.body.name || !req.body.img_name || !req.body.developer || !req.body.description || !req.body.price || !req.body.year
+        || !validateImg(req.body.img_name) || !validatePrice(req.body.price) || !validateYear(req.body.year)) {
+        var item = {
+            name: req.body.name,
+            img_name: req.body.img_name,
+            developer: req.body.developer,
+            description: req.body.description,
+            price: req.body.price,
+            year: req.body.year
+        }
+        var msg = "Niepoprawne wartości w formularzu";
+        res.render("edit-game", { user: req.signedCookies.user, item: item, msg: msg, cart: req.signedCookies.cart });
+    } else {
+        await repo.createGame(req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
+        res.redirect("/admin");
+    }
 });
 
 app.use((req, res) => {

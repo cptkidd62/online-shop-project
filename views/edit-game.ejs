@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj produkt</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+
+<body>
+    <%- include('navbar') %>
+    <div class="main-content">
+        <div>
+            <form action="/admin/edit/<% if (locals.item) { %><%= locals.item.id %><% } %>" method="post">
+                <div>
+                    <label for="name">Nazwa:</label>
+                    <input type="text" name="name" id="name" value="<% if (locals.item) { %><%= locals.item.name %><% } %>">
+                </div>
+                <div>
+                    <label for="img_name">Ścieżka obrazka:</label>
+                    <input type="text" name="img_name" id="img_name" value="<% if (locals.item) { %><%= locals.item.img_name %><% } %>">
+                </div>
+                <div>
+                    <label for="developer">Deweloper:</label>
+                    <input type="text" name="developer" id="developer" value="<% if (locals.item) { %><%= locals.item.developer %><% } %>">
+                </div>
+                <div>
+                    <label for="description">Opis:</label>
+                    <input type="text" name="description" id="description" value="<% if (locals.item) { %><%= locals.item.description %><% } %>">
+                </div>
+                <div>
+                    <label for="price">Cena:</label>
+                    <input type="number" name="price" id="price" value="<% if (locals.item) { %><%= locals.item.price %><% } %>">
+                </div>
+                <div>
+                    <label for="year">Rok:</label>
+                    <input type="number" name="year" id="year" value="<% if (locals.item) { %><%= locals.item.year %><% } %>">
+                </div>
+                <div>
+                    <input type="submit" value="Zapisz">
+                </div>
+            </form>
+            <% if (locals.msg) { %>
+                <%= locals.msg %>
+            <% } %>
+        </div>
+    </div>
+    <footer>© 2023</footer>
+</body>
+
+</html>
