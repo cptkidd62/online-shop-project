@@ -11,11 +11,15 @@
         <% if (locals.user.isadmin) { %>
             <a class="header-link to-right" href="http://localhost:3000/admin/">Panel administratora</a>
         <% } %>
+        <% if (locals.user.isuser) { %>
         <a class="header-link to-right" href="http://localhost:3000/my-account/">
             <%= locals.user.login %><br />Moje konto
         </a>
+        <% } %>
         <a class="header-link to-right" href="http://localhost:3000/logout/">Wyloguj się</a>
+        <% if (locals.user.isuser) { %>
         <a class="header-link to-right" href="http://localhost:3000/cart/">Koszyk</a>
+        <% } %>
         <% } else { %>
             <a class="header-link to-right" href="http://localhost:3000/login/">Zaloguj się</a>
             <% } %>
