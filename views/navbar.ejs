@@ -18,7 +18,7 @@
         <% } %>
         <a class="header-link to-right" href="http://localhost:3000/logout/">Wyloguj się</a>
         <% if (locals.user.isuser) { %>
-        <a class="header-link to-right" href="http://localhost:3000/cart/">Koszyk</a>
+        <a class="header-link to-right" href="http://localhost:3000/cart/">Koszyk(<% if (locals.cart) { %><%= locals.cart.length %><% } else { %>0<% } %>)</a>
         <% } %>
         <% } else { %>
             <a class="header-link to-right" href="http://localhost:3000/login/">Zaloguj się</a>

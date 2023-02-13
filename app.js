@@ -4,7 +4,8 @@ const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 
-const dbrepo = require("./db")
+const dbrepo = require("./db");
+const { signedCookies } = require("cookie-parser");
 
 const app = express();
 
@@ -70,7 +71,7 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
     var data = await repo.retrieveRandom(3);
-    res.render("index", { prods: { items: data }, user: req.signedCookies.user });
+    res.render("index", { prods: { items: data }, user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
 app.get("/games", async (req, res) => {
@@ -80,7 +81,7 @@ app.get("/games", async (req, res) => {
     } else {
         data = await repo.retrieve();
     }
-    res.render("view-all", { prods: { items: data }, user: req.signedCookies.user });
+    res.render("view-all", { prods: { items: data }, user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
 app.get("/games/:id", async (req, res) => {
@@ -88,14 +89,26 @@ app.get("/games/:id", async (req, res) => {
     if (!data) {
         res.redirect("/");
     }
-    res.render("view-details", { item: data, user: req.signedCookies.user });
+    res.render("view-details", { item: data, user: req.signedCookies.user, cart: req.signedCookies.cart });
+});
+
+app.post("/games/:id", (req, res) => {
+    var cart = [];
+    if (req.signedCookies.cart) {
+        cart = req.signedCookies.cart;
+    }
+    if (!cart.includes(req.params.id)) {
+        cart.push(req.params.id);
+    }
+    res.cookie("cart", cart, { maxAge: 7200000, signed: true });
+    res.redirect("/games/" + req.params.id);
 });
 
 app.get("/login", (req, res) => {
     if (req.signedCookies.user) {
         res.redirect("/");
     }
-    res.render("login", { user: req.signedCookies.user });
+    res.render("login", { user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
 app.post("/login", async (req, res) => {
@@ -103,16 +116,16 @@ app.post("/login", async (req, res) => {
     var pwd = req.body.txtpwd;
     var pwdHash = await repo.getPasswordForUsr(login)
     if (pwdHash == null) {
-        res.render("login", { msg: "Błędny login", user: req.signedCookies.user });
+        res.render("login", { msg: "Błędny login", user: req.signedCookies.user, cart: req.signedCookies.cart });
     } else if (await bcrypt.compare(pwd, pwdHash)) {
-        res.cookie("user", await repo.getUsr(login), { maxAge: 1800000, signed: true });
+        res.cookie("user", await repo.getUsr(login), { maxAge: 7200000, signed: true });
         if (req.query.returnUrl) {
             res.redirect(req.query.returnUrl);
         } else {
             res.redirect("/");
         }
     } else {
-        res.render("login", { msg: "Błędne hasło", user: req.signedCookies.user });
+        res.render("login", { msg: "Błędne hasło", user: req.signedCookies.user, cart: req.signedCookies.cart });
     }
 });
 
@@ -120,7 +133,7 @@ app.get("/signup", (req, res) => {
     if (req.signedCookies.user) {
         res.redirect("/");
     }
-    res.render("signup", { user: req.signedCookies.user });
+    res.render("signup", { user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
 app.post("/signup", async (req, res) => {
@@ -129,9 +142,9 @@ app.post("/signup", async (req, res) => {
     var repwd = req.body.txtrepwd;
     var pwdHash = await repo.getPasswordForUsr(login)
     if (pwdHash) {
-        res.render("signup", { msg: "Podany login już istnieje", user: req.signedCookies.user });
+        res.render("signup", { msg: "Podany login już istnieje", user: req.signedCookies.user, cart: req.signedCookies.cart });
     } else if (pwd != repwd) {
-        res.render("signup", { msg: "Hasła się nie zgadzają", user: req.signedCookies.user });
+        res.render("signup", { msg: "Hasła się nie zgadzają", user: req.signedCookies.user, cart: req.signedCookies.cart });
     } else {
         var hash = await bcrypt.hash(pwd, 12);
         repo.createUsr(login, hash, true, false);
@@ -145,6 +158,7 @@ app.post("/signup", async (req, res) => {
 
 app.get("/logout", (req, res) => {
     res.cookie("user", "", { maxAge: -1 });
+    res.cookie("cart", [], { maxAge: -1 });
     res.redirect("/");
 });
 
@@ -153,14 +167,24 @@ app.get("/my-account", authorize("user"), async (req, res) => {
         res.redirect("/");
     }
     var data = await repo.getOrdersInfo(req.signedCookies.user.id, null);
-    res.render("my-account", { user: req.signedCookies.user, orders: data, moment: moment });
+    res.render("my-account", { user: req.signedCookies.user, orders: data, moment: moment, cart: req.signedCookies.cart });
 });
 
-app.get("/cart", authorize("user"), (req, res) => {
+app.get("/cart", authorize("user"), async (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
-    res.render("cart", { user: req.signedCookies.user });
+    var items = [];
+    var cart = req.signedCookies.cart;
+    if (cart) {
+        for (var i = 0; i < cart.length; i++) {
+            var data = await repo.retrieveByID(cart[i]);
+            if (data) {
+                items.push(data);
+            }
+        }
+    }
+    res.render("cart", { user: req.signedCookies.user, cart: cart, items: items });
 });
 
 app.get("/orders/:id", authorizeOrder(), async (req, res) => {
@@ -169,14 +193,14 @@ app.get("/orders/:id", authorizeOrder(), async (req, res) => {
         res.redirect("/");
     }
     var contents = await repo.getOrderContents(Number(req.params.id));
-    res.render("order-details", { order: data, contents: contents, user: req.signedCookies.user, moment: moment });
+    res.render("order-details", { order: data, contents: contents, user: req.signedCookies.user, moment: moment, cart: req.signedCookies.cart });
 });
 
 app.get("/admin", authorize("admin"), (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
-    res.render("admin-panel", { user: req.signedCookies.user });
+    res.render("admin-panel", { user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
 app.get("/admin/orders", authorize("admin"), async (req, res) => {
@@ -185,7 +209,7 @@ app.get("/admin/orders", authorize("admin"), async (req, res) => {
     }
     var realized = await repo.getOrdersInfo(null, true);
     var notrealized = await repo.getOrdersInfo(null, false);
-    res.render("admin-orders", { user: req.signedCookies.user, realized: realized, notrealized: notrealized, moment: moment });
+    res.render("admin-orders", { user: req.signedCookies.user, realized: realized, notrealized: notrealized, moment: moment, cart: req.signedCookies.cart });
 });
 
 app.get("/admin/users", authorize("admin"), async (req, res) => {
@@ -193,7 +217,7 @@ app.get("/admin/users", authorize("admin"), async (req, res) => {
         res.redirect("/");
     }
     var usrs = await repo.getUsrs();
-    res.render("admin-users", { user: req.signedCookies.user, usrs: usrs });
+    res.render("admin-users", { user: req.signedCookies.user, usrs: usrs, cart: req.signedCookies.cart });
 });
 
 app.use((req, res) => {

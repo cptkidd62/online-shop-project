@@ -95,4 +95,8 @@ exports.Repository = class Repository {
         console.log(data.rows);
         return data.rows;
     }
+
+    async createOrder(cust_id, contentsList) {
+        
+    }
 }

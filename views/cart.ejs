@@ -7,12 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koszyk</title>
     <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/cart-style.css">
 </head>
 
 <body>
     <%- include('navbar') %>
     <div class="main-content">
         <h1>Koszyk</h1>
+        <div class="cart-list">
+            <% locals.items.forEach( item=> { %>
+                <div class="cart-list-elem">
+                    <a href="/games/<%= item.id %>/">
+                        <img src="/img/<%= item.img_name %>" alt="img">
+                        <h3>
+                            <%= item.name %>
+                        </h3>
+                        <h3>
+                            <%= item.price %>PLN
+                        </h3>
+                    </a>
+                </div>
+                <% }) %>
+        </div>
     </div>
     <footer>© 2023</footer>
 </body>
