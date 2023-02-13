@@ -40,7 +40,7 @@ exports.Repository = class Repository {
     }
 
     async getPasswordForUsr(login) {
-        var data = await this.pool.query("SELECT pwdHash FROM users WHERE login = $1", [login]);
+        var data = await this.pool.query("SELECT pwdhash FROM users WHERE login = $1", [login]);
         console.log(data.rows);
         if (data.rows.length != 0) {
             return data.rows[0].pwdhash;
