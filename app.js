@@ -99,6 +99,33 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.get("/signup", (req, res) => {
+    if (req.signedCookies.user) {
+        res.redirect("/");
+    }
+    res.render("signup", { user: req.signedCookies.user });
+});
+
+app.post("/signup", async (req, res) => {
+    var login = req.body.txtlogin;
+    var pwd = req.body.txtpwd;
+    var repwd = req.body.txtrepwd;
+    var pwdHash = await repo.getPasswordForUsr(login)
+    if (pwdHash) {
+        res.render("signup", { msg: "Podany login już istnieje", user: req.signedCookies.user });
+    } else if (pwd != repwd) {
+        res.render("signup", { msg: "Hasła się nie zgadzają", user: req.signedCookies.user });
+    } else {
+        var hash = await bcrypt.hash(pwd, 12);
+        repo.createUsr(login, hash, true, false);
+        if (req.query.returnUrl) {
+            res.redirect(req.query.returnUrl);
+        } else {
+            res.redirect("/");
+        }
+    }
+});
+
 app.get("/logout", (req, res) => {
     res.cookie("user", "", { maxAge: -1 });
     res.redirect("/");
