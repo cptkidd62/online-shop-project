@@ -187,6 +187,14 @@ app.get("/admin/orders", authorize("admin"), async (req, res) => {
     res.render("admin-orders", { user: req.signedCookies.user, realized: realized, notrealized: notrealized, moment: moment });
 });
 
+app.get("/admin/users", authorize("admin"), async (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    var usrs = await repo.getUsrs();
+    res.render("admin-users", { user: req.signedCookies.user, usrs: usrs });
+});
+
 app.use((req, res) => {
     res.render("404", { url: req.url });
 });

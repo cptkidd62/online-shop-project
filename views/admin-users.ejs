@@ -5,19 +5,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel administratora - zamówienia</title>
+    <title>Panel administratora - użytkownicy</title>
     <link rel="stylesheet" href="/styles/style.css">
-    <link rel="stylesheet" href="/styles/orders-style.css">
+    <link rel="stylesheet" href="/styles/users-style.css">
 </head>
 
 <body>
     <%- include('navbar') %>
         <div class="main-content">
-            <h1>Panel administratora - zamówienia</h1>
-            <h2>Zrealizowane:</h2>
-            <%- include('orders-list', {orders: locals.realized}) %>
-                <h2>W realizacji:</h2>
-                <%- include('orders-list', {orders: locals.notrealized}) %>
+            <h1>Panel administratora - użytkownicy</h1>
+            <%- include('users-list', locals.usrs) %>
         </div>
         <footer>© 2023</footer>
 </body>

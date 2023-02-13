@@ -1,0 +1,14 @@
+.usr-list {
+    background-color: red;
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.usr-list-elem {
+    background-color: yellow;
+    width: 80%;
+    height: auto;
+    align-self: flex-start;
+    margin: 20px;
+}

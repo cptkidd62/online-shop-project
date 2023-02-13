@@ -55,6 +55,12 @@ exports.Repository = class Repository {
         return data.rows[0];
     }
 
+    async getUsrs() {
+        var data = await this.pool.query("SELECT * FROM users");
+        console.log(data.rows);
+        return data.rows;
+    }
+
     async createUsr(login, pwdhash, user, admin) {
         await this.pool.query("INSERT INTO users (login, pwdhash, isuser, isadmin) VALUES ($1, $2, $3, $4)", [login, pwdhash, user, admin]);
     }

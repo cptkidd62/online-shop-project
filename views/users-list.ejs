@@ -1,0 +1,15 @@
+<div class="usr-list">
+    <% usrs.forEach( usr=> { %>
+        <div class="usr-list-elem">
+                <h3>
+                    ID użytkownika: <%= usr.id %>
+                </h3>
+                <h3>
+                    Login: <%= usr.login %>
+                </h3>
+                <h3>
+                    Role: <% if (usr.isuser) { %> Zwykły użytkownik <% } if (usr.isadmin) { %> Administrator <% } %>
+                </h3>
+        </div>
+        <% }) %>
+</div>
