@@ -14,14 +14,23 @@ exports.Repository = class Repository {
     async retrieve() {
         var data = await this.pool.query("SELECT * FROM games");
         console.log(data.rows);
-        var res = data.rows;
         return data.rows;
     }
 
     async retrieveByID(id) {
         var data = await this.pool.query("SELECT * FROM games WHERE id = $1", [id]);
         console.log(data.rows);
-        return data.rows[0];
+        if (data.rows.length != 0) {
+            return data.rows[0];
+        } else {
+            return null;
+        }
+    }
+
+    async retrieveBySearch(txt) {
+        var data = await this.pool.query("SELECT * FROM games WHERE UPPER(name) LIKE UPPER('%' || $1 || '%') OR UPPER(developer) LIKE UPPER('%' || $1 || '%') OR UPPER(description) LIKE UPPER('%' || $1 || '%')", [txt]);
+        console.log(data.rows);
+        return data.rows;
     }
 
     async retrieveRandom(n) {

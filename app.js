@@ -68,6 +68,9 @@ app.get("/games", async (req, res) => {
 
 app.get("/games/:id", async (req, res) => {
     var data = await repo.retrieveByID(Number(req.params.id));
+    if (!data) {
+        res.redirect("/");
+    }
     res.render("view-details", { item: data, user: req.signedCookies.user });
 });
 
