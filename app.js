@@ -92,7 +92,7 @@ app.get("/games/:id", async (req, res) => {
     res.render("view-details", { item: data, user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
-app.post("/games/:id", (req, res) => {
+app.post("/games/:id", authorize("user"), (req, res) => {
     var cart = [];
     if (req.signedCookies.cart) {
         cart = req.signedCookies.cart;
@@ -185,6 +185,17 @@ app.get("/cart", authorize("user"), async (req, res) => {
         }
     }
     res.render("cart", { user: req.signedCookies.user, cart: cart, items: items });
+});
+
+app.post("/cart", authorize("user"), async (req, res) => {
+    var cart = req.signedCookies.cart;
+    if (!req.signedCookies.user || !cart || cart == []) {
+        res.redirect("/");
+    } else {
+        await repo.createOrder(req.signedCookies.user.id, cart);
+        res.cookie("cart", [], { maxAge: -1 });
+        res.redirect("/my-account");
+    }
 });
 
 app.get("/orders/:id", authorizeOrder(), async (req, res) => {

@@ -97,6 +97,13 @@ exports.Repository = class Repository {
     }
 
     async createOrder(cust_id, contentsList) {
-        
+        var data = await this.pool.query("INSERT INTO orders (customer_id, date, realized) VALUES ($1, $2, False) RETURNING id", [cust_id, new Date()]);
+        console.log(data.rows);
+        var oid = data.rows[0].id;
+        for (var i = 0; i < contentsList.length; i++) {
+            var dat = await this.pool.query("SELECT price FROM games WHERE id = $1", [contentsList[i]]);
+            var price = dat.rows[0].price;
+            await this.pool.query("INSERT INTO orders_games (order_id, game_id, price) VALUES ($1, $2, $3)", [oid, contentsList[i], price]);
+        }
     }
 }
