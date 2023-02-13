@@ -116,6 +116,11 @@ app.post("/games/:id", authorize("user"), (req, res) => {
     res.redirect("/games/" + req.params.id);
 });
 
+app.get("/games/:id/delete", authorize("admin"), async (req, res) => {
+    await repo.deleteGame(Number(req.params.id));
+    res.redirect("/games");
+});
+
 app.get("/login", (req, res) => {
     if (req.signedCookies.user) {
         res.redirect("/");
@@ -268,6 +273,36 @@ app.post("/admin/edit", authorize("admin"), async (req, res) => {
         res.render("edit-game", { user: req.signedCookies.user, item: item, msg: msg, cart: req.signedCookies.cart });
     } else {
         await repo.createGame(req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
+        res.redirect("/admin");
+    }
+});
+
+app.get("/admin/edit/:id", authorize("admin"), async (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    var data = await repo.retrieveByID(Number(req.params.id));
+    res.render("edit-game", { item: data, user: req.signedCookies.user, cart: req.signedCookies.cart });
+});
+
+app.post("/admin/edit/:id", authorize("admin"), async (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    if (!req.body.name || !req.body.img_name || !req.body.developer || !req.body.description || !req.body.price || !req.body.year
+        || !validateImg(req.body.img_name) || !validatePrice(req.body.price) || !validateYear(req.body.year)) {
+        var item = {
+            name: req.body.name,
+            img_name: req.body.img_name,
+            developer: req.body.developer,
+            description: req.body.description,
+            price: req.body.price,
+            year: req.body.year
+        }
+        var msg = "Niepoprawne wartości w formularzu";
+        res.render("edit-game", { user: req.signedCookies.user, item: item, msg: msg, cart: req.signedCookies.cart });
+    } else {
+        await repo.updateGame(Number(req.params.id), req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
         res.redirect("/admin");
     }
 });

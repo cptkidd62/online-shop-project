@@ -18,6 +18,10 @@
         <form action="/games/<%= locals.item.id %>" method="post">
             <input type="submit" value="Dodaj do koszyka">
         </form>
+        <% if (locals.user.isadmin) { %>
+            <a href="http://localhost:3000/admin/edit/<%= locals.item.id %>">Edytuj</a>
+            <a href="delete">Usuń</a>
+        <% } %>
     </div>
     <footer>© 2023</footer>
 </body>
