@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
+const moment = require("moment");
 
 const dbrepo = require("./db")
 
@@ -27,7 +28,7 @@ function isAdmin(usr) {
 }
 
 function authorize(role) {
-    return function(req, res, next) {
+    return function (req, res, next) {
         if (req.signedCookies.user) {
             if (role == "admin") {
                 if (isAdmin(req.signedCookies.user)) {
@@ -41,8 +42,24 @@ function authorize(role) {
             console.log("Błąd autoryzacji - niewystarczające uprawnienia dostępu");
             res.redirect("/");
         } else {
-            res.redirect("/login?returnUrl="+req.url);
+            res.redirect("/login?returnUrl=" + req.url);
         }
+    }
+}
+
+function authorizeOrder() {
+    return async function (req, res, next) {
+        if (req.signedCookies.user) {
+            var order = await repo.getOrderInfo(req.params.id);
+            if (!order) {
+                res.redirect("/");
+            }
+            if (isAdmin(req.signedCookies.user) || order.customer_id == req.signedCookies.user.id) {
+                return next();
+            }
+        }
+        console.log("Błąd autoryzacji - niewystarczające uprawnienia dostępu");
+        res.redirect("/");
     }
 }
 
@@ -143,6 +160,14 @@ app.get("/cart", authorize("user"), (req, res) => {
         res.redirect("/");
     }
     res.render("cart", { user: req.signedCookies.user });
+});
+
+app.get("/orders/:id", authorizeOrder(), async (req, res) => {
+    var data = await repo.getOrderInfo(Number(req.params.id));
+    if (!data) {
+        res.redirect("/");
+    }
+    res.render("order-details", { order: data, user: req.signedCookies.user, moment: moment });
 });
 
 app.get("/admin", authorize("admin"), (req, res) => {
