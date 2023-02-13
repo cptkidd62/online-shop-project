@@ -3,7 +3,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 
-const dbrepo = require("./dbrepo")
+const dbrepo = require("./db")
 
 const app = express();
 
@@ -19,11 +19,11 @@ app.use(express.urlencoded({
 }));
 
 function isUser(usr) {
-    return usr.user;
+    return usr.isuser;
 }
 
 function isAdmin(usr) {
-    return usr.admin;
+    return usr.isadmin;
 }
 
 function authorize(role) {
@@ -51,23 +51,23 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get("/", (req, res) => {
-    var data = repo.retrieveRandom(3);
+app.get("/", async (req, res) => {
+    var data = await repo.retrieveRandom(3);
     res.render("index", { prods: { items: data }, user: req.signedCookies.user });
 });
 
-app.get("/games", (req, res) => {
+app.get("/games", async (req, res) => {
     var data = [];
     if (req.query.search) {
-        data = repo.retrieveBySearch(req.query.search);
+        data = await repo.retrieveBySearch(req.query.search);
     } else {
-        data = repo.retrieve();
+        data = await repo.retrieve();
     }
     res.render("view-all", { prods: { items: data }, user: req.signedCookies.user });
 });
 
-app.get("/games/:id", (req, res) => {
-    var data = repo.retrieveByID(Number(req.params.id));
+app.get("/games/:id", async (req, res) => {
+    var data = await repo.retrieveByID(Number(req.params.id));
     res.render("view-details", { item: data, user: req.signedCookies.user });
 });
 
@@ -81,11 +81,11 @@ app.get("/login", (req, res) => {
 app.post("/login", async (req, res) => {
     var login = req.body.txtlogin;
     var pwd = req.body.txtpwd;
-    var pwdHash = repo.getPasswordForUsr(login)
+    var pwdHash = await repo.getPasswordForUsr(login)
     if (pwdHash == null) {
         res.render("login", { msg: "Błędny login", user: req.signedCookies.user });
     } else if (await bcrypt.compare(pwd, pwdHash)) {
-        res.cookie("user", repo.getUsr(login), { maxAge: 1800000, signed: true });
+        res.cookie("user", await repo.getUsr(login), { maxAge: 1800000, signed: true });
         if (req.query.returnUrl) {
             res.redirect(req.query.returnUrl);
         } else {

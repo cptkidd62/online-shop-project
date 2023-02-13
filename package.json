@@ -7,6 +7,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "path": "^0.12.7",
+    "pg": "^8.9.0",
     "tiny-csrf": "^1.1.3"
   }
 }
