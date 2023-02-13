@@ -8,12 +8,14 @@
     <title>Zamówienie nr <%= locals.order.id %></title>
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/view-details-style.css">
+    <link rel="stylesheet" href="/styles/view-all-style.css">
 </head>
 
 <body>
     <%- include('navbar') %>
     <div class="main-content">
         <h2>Zamówienie nr <%= locals.order.id %> z dnia <%= moment(locals.order.date).format("DD.MM.YYYY") %></h2>
+        <%- include('order-contents', locals.contents) %>
     </div>
     <footer>© 2023</footer>
 </body>

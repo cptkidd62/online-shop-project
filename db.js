@@ -89,4 +89,10 @@ exports.Repository = class Repository {
         console.log(data.rows);
         return data.rows;
     }
+
+    async getOrderContents(id) {
+        var data = await this.pool.query("SELECT games.id AS id, name, orders_games.price AS price, img_name, developer, year FROM (SELECT * FROM orders_games WHERE order_id = $1) AS orders_games LEFT JOIN games ON orders_games.game_id = games.id", [id]);
+        console.log(data.rows);
+        return data.rows;
+    }
 }

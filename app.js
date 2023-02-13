@@ -168,7 +168,8 @@ app.get("/orders/:id", authorizeOrder(), async (req, res) => {
     if (!data) {
         res.redirect("/");
     }
-    res.render("order-details", { order: data, user: req.signedCookies.user, moment: moment });
+    var contents = await repo.getOrderContents(Number(req.params.id));
+    res.render("order-details", { order: data, contents: contents, user: req.signedCookies.user, moment: moment });
 });
 
 app.get("/admin", authorize("admin"), (req, res) => {
