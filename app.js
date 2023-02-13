@@ -117,7 +117,11 @@ app.post("/games/:id", authorize("user"), (req, res) => {
 });
 
 app.get("/games/:id/delete", authorize("admin"), async (req, res) => {
-    await repo.deleteGame(Number(req.params.id));
+    try {
+        await repo.deleteGame(Number(req.params.id));
+    } catch (e) {
+        console.log("Delete error");
+    }
     res.redirect("/games");
 });
 
@@ -302,7 +306,11 @@ app.post("/admin/edit/:id", authorize("admin"), async (req, res) => {
         var msg = "Niepoprawne wartości w formularzu";
         res.render("edit-game", { user: req.signedCookies.user, item: item, msg: msg, cart: req.signedCookies.cart });
     } else {
-        await repo.updateGame(Number(req.params.id), req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
+        try {
+            await repo.updateGame(Number(req.params.id), req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
+        } catch (e) {
+            console.log("Update error");
+        }
         res.redirect("/admin");
     }
 });
