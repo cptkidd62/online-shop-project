@@ -148,11 +148,12 @@ app.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-app.get("/my-account", authorize("user"), (req, res) => {
+app.get("/my-account", authorize("user"), async (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
-    res.render("my-account", { user: req.signedCookies.user });
+    var data = await repo.getOrdersInfo(req.signedCookies.user.id, null);
+    res.render("my-account", { user: req.signedCookies.user, orders: data, moment: moment });
 });
 
 app.get("/cart", authorize("user"), (req, res) => {
@@ -175,6 +176,15 @@ app.get("/admin", authorize("admin"), (req, res) => {
         res.redirect("/");
     }
     res.render("admin-panel", { user: req.signedCookies.user });
+});
+
+app.get("/admin/orders", authorize("admin"), async (req, res) => {
+    if (!req.signedCookies.user) {
+        res.redirect("/");
+    }
+    var realized = await repo.getOrdersInfo(null, true);
+    var notrealized = await repo.getOrdersInfo(null, false);
+    res.render("admin-orders", { user: req.signedCookies.user, realized: realized, notrealized: notrealized, moment: moment });
 });
 
 app.use((req, res) => {

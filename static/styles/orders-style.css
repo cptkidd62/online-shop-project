@@ -1,0 +1,21 @@
+.ord-list {
+    background-color: red;
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.ord-list-elem a {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    color: black;
+}
+
+.ord-list-elem {
+    background-color: yellow;
+    width: 80%;
+    height: auto;
+    align-self: flex-start;
+    margin: 20px;
+}

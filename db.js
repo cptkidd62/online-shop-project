@@ -68,4 +68,19 @@ exports.Repository = class Repository {
             return null;
         }
     }
+
+    async getOrdersInfo(c_id, realized) {
+        var data;
+        if (c_id && realized != null) {
+            data = await this.pool.query("SELECT * FROM orders WHERE customer_id = $1 AND realized = $2", [c_id, realized]);
+        } else if (c_id) {
+            data = await this.pool.query("SELECT * FROM orders WHERE customer_id = $1", [c_id]);
+        } else if (realized != null) {
+            data = await this.pool.query("SELECT * FROM orders WHERE realized = $1", [realized]);
+        } else {
+            data = await this.pool.query("SELECT * FROM orders");
+        }
+        console.log(data.rows);
+        return data.rows;
+    }
 }

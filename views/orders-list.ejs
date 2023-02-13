@@ -1,0 +1,17 @@
+<div class="ord-list">
+    <% orders.forEach( order=> { %>
+        <div class="ord-list-elem">
+            <a href="/orders/<%= order.id %>/">
+                <h3>
+                    Nr zamówienia: <%= order.id %>
+                </h3>
+                <h3>
+                    Data zamówienia: <%= moment(order.date).format("DD.MM.YYYY") %>
+                </h3>
+                <h3>
+                    Status zamówienia: <% if (order.realized) { %> Zrealizowane <% } else { %> W realizacji <% } %>
+                </h3>
+            </a>
+        </div>
+        <% }) %>
+</div>
