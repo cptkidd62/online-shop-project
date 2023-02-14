@@ -1,14 +1,18 @@
 .usr-list {
-    background-color: red;
     display: flex;
     flex-flow: column;
     width: 100%;
 }
 
 .usr-list-elem {
-    background-color: yellow;
+    background-color: antiquewhite;
+    border: 3px midnightblue solid;
     width: 80%;
     height: auto;
     align-self: flex-start;
     margin: 20px;
+}
+
+.usr-list-elem h3 {
+    margin-left: 20px;
 }

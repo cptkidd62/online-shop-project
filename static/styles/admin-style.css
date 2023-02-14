@@ -1,0 +1,9 @@
+.main-content a {
+    font-size: large;
+    margin: 20px 30px;
+    color: midnightblue;
+}
+
+.main-content a:hover {
+    color: royalblue;
+}

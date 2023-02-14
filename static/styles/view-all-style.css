@@ -1,11 +1,9 @@
 .shop-view {
-    background-color: aqua;
     display: flex;
     flex-flow: row;
 }
 
 .sv-side-panel {
-    background-color: tomato;
     display: flex;
     flex-flow: column;
     width: 40%;

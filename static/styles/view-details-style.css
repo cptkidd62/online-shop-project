@@ -1,4 +1,34 @@
+.main-content {
+    font-size: large;
+}
+
+.main-content input {
+    font-size: large;
+    padding: 5px;
+    margin: 10px 20px;
+}
+
 .main-content img {
     width: 400px;
     height: auto;
+}
+
+.main-content div#row {
+    display: flex;
+    flex-flow: row;
+}
+
+.main-content div#column {
+    display: flex;
+    flex-flow: column;
+}
+
+.main-content a {
+    color: midnightblue;
+    display: block;
+    margin: 30px auto;
+}
+
+.main-content a:hover {
+    color: royalblue;
 }

@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const moment = require("moment");
 
 const dbrepo = require("./db");
-const { signedCookies } = require("cookie-parser");
 
 const app = express();
 

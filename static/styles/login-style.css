@@ -1,3 +1,15 @@
 .login-page {
     align-self: center;
 }
+
+.login-page div {
+    margin-bottom: 5px;
+}
+
+.login-page a {
+    color: midnightblue;
+}
+
+.login-page a:hover {
+    color: royalblue;
+}

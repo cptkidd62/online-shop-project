@@ -1,5 +1,5 @@
 body {
-    background-color: lightsalmon;
+    background-color: antiquewhite;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     flex-flow: column;
@@ -10,10 +10,11 @@ body {
 }
 
 div.main-content {
-    background-color: blueviolet;
+    background-color: white;
     display: flex;
     flex-flow: column;
     flex: 1;
+    padding: 10px;
 }
 
 .main-content h1 {
@@ -25,19 +26,31 @@ div.main-content {
     display: flex;
     flex-flow: row;
     justify-content: space-between;
+    font-weight: bold;
 }
 
 .navbar div {
     margin: auto 1px;
-    background-color: coral;
     align-self: center;
-    width: 50%;
+    width: 40%;
+}
+
+.navbar #search {
+    width: 400px;
+}
+
+.navbar input {
+    font-size: 1em;
 }
 
 .header-link {
-    color: limegreen;
+    color: white;
     text-decoration: none;
     margin: 20px;
+}
+
+.header-link:hover {
+    color: wheat;
 }
 
 .to-left {
@@ -49,7 +62,6 @@ div.main-content {
 }
 
 .prod-list {
-    background-color: red;
     display: flex;
     flex-flow: wrap;
     width: 100%;
@@ -63,10 +75,11 @@ div.main-content {
 }
 
 .prod-list-elem {
-    background-color: yellow;
+    background-color: antiquewhite;
+    border: 3px midnightblue solid;
     width: 500px;
     max-width: 30%;
-    height: 600px;
+    min-height: 500px;
     align-self: center;
     margin: auto;
     margin-top: 20px;
@@ -78,6 +91,33 @@ div.main-content {
     height: auto;
 }
 
+.prod-list-elem h3 {
+    margin-left: 15px;
+}
+
+#edit-form-div {
+    align-self: center;
+}
+
+#edit-form-div div {
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+#edit-form-div #btn {
+    font-size: 1em;
+}
+
+.msg {
+    font-size: 1em;
+    font-weight: bolder;
+    color: red;
+}
+
 footer {
-    background-color: beige;
+    background-color: midnightblue;
+    padding: 10px 30px;
+    color: white;
+    font-weight: bold;
 }

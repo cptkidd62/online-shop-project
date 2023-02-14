@@ -5,25 +5,39 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= locals.item.name %></title>
+    <title>
+        <%= locals.item.name %>
+    </title>
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="/styles/view-details-style.css">
 </head>
 
 <body>
     <%- include('navbar') %>
-    <div class="main-content">
-        <h2><%= locals.item.name %></h2>
-        <img src="/img/<%= locals.item.img_name %>" alt="img">
-        <form action="/games/<%= locals.item.id %>" method="post">
-            <input type="submit" value="Dodaj do koszyka">
-        </form>
-        <% if (locals.user.isadmin) { %>
-            <a href="http://localhost:3000/admin/edit/<%= locals.item.id %>">Edytuj</a>
-            <a href="delete">Usuń</a>
-        <% } %>
-    </div>
-    <footer>© 2023</footer>
+        <div class="main-content">
+            <h2>
+                <%= locals.item.name %>
+            </h2>
+            <h3>
+                <%= locals.item.developer %>
+            </h3>
+            <div id="row">
+                <img src="/img/<%= locals.item.img_name %>" alt="img">
+                <div id="column">
+                    <form action="/games/<%= locals.item.id %>" method="post">
+                        <input type="submit" value="Dodaj do koszyka">
+                    </form>
+                    <% if (locals.user && locals.user.isadmin) { %>
+                        <a href="http://localhost:3000/admin/edit/<%= locals.item.id %>">Edytuj</a>
+                        <a href="delete">Usuń</a>
+                        <% } %>
+                </div>
+            </div>
+            <p>
+                <%= locals.item.description %>
+            </p>
+        </div>
+        <footer>© 2023</footer>
 </body>
 
 </html>

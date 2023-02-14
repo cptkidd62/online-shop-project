@@ -12,30 +12,32 @@
 
 <body>
     <%- include('navbar') %>
-    <div class="main-content">
-        <div class="login-page">
-            <form action="/signup" method="post">
-                <h3>Zaloguj się</h3>
-                <div>
-                    <label for="txtlogin">Login:</label>
-                    <input type="text" name="txtlogin">
-                </div>
-                <div>
-                    <label for="txtpwd">Hasło:</label>
-                    <input type="password" name="txtpwd">
-                </div>
-                <div>
-                    <label for="txtrepwd">Powtórz hasło:</label>
-                    <input type="password" name="txtrepwd">
-                </div>
-                <input type="submit" value="Załóż konto">
-            </form>
+        <div class="main-content">
+            <div class="login-page">
+                <form action="/signup" method="post">
+                    <h3>Zaloguj się</h3>
+                    <div>
+                        <label for="txtlogin">Login:</label>
+                        <input type="text" name="txtlogin">
+                    </div>
+                    <div>
+                        <label for="txtpwd">Hasło:</label>
+                        <input type="password" name="txtpwd">
+                    </div>
+                    <div>
+                        <label for="txtrepwd">Powtórz hasło:</label>
+                        <input type="password" name="txtrepwd">
+                    </div>
+                    <input type="submit" value="Załóż konto">
+                </form>
+                <% if (locals.msg) { %>
+                    <p class="msg">
+                        <%= locals.msg %>
+                    </p>
+                    <% } %>
+            </div>
         </div>
-        <% if (locals.msg) { %>
-            <%= locals.msg %>
-        <% } %>
-    </div>
-    <footer>© 2023</footer>
+        <footer>© 2023</footer>
 </body>
 
 </html>

@@ -12,7 +12,7 @@
 <body>
     <%- include('navbar') %>
     <div class="main-content">
-        <div>
+        <div id="edit-form-div">
             <form action="/admin/edit/<% if (locals.item) { %><%= locals.item.id %><% } %>" method="post">
                 <div>
                     <label for="name">Nazwa:</label>
@@ -39,11 +39,11 @@
                     <input type="number" name="year" id="year" value="<% if (locals.item) { %><%= locals.item.year %><% } %>">
                 </div>
                 <div>
-                    <input type="submit" value="Zapisz">
+                    <input type="submit" value="Zapisz" id="btn">
                 </div>
             </form>
             <% if (locals.msg) { %>
-                <%= locals.msg %>
+                <p class="msg"><%= locals.msg %></p>
             <% } %>
         </div>
     </div>

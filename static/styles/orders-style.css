@@ -1,5 +1,4 @@
 .ord-list {
-    background-color: red;
     display: flex;
     flex-flow: column;
     width: 100%;
@@ -13,9 +12,14 @@
 }
 
 .ord-list-elem {
-    background-color: yellow;
-    width: 80%;
+    background-color: antiquewhite;
+    border: 3px midnightblue solid;
+    min-width: 60%;
     height: auto;
     align-self: flex-start;
     margin: 20px;
+}
+
+.ord-list-elem h3 {
+    margin-left: 20px;
 }
