@@ -13,14 +13,14 @@
     <%- include('navbar') %>
     <div class="main-content">
         <div id="edit-form-div">
-            <form action="/admin/edit/<% if (locals.item) { %><%= locals.item.id %><% } %>" method="post">
+            <form action="/admin/edit/<% if (locals.item) { %><%= locals.item.id %><% } %>" method="post" enctype="multipart/form-data">
                 <div>
                     <label for="name">Nazwa:</label>
                     <input type="text" name="name" id="name" value="<% if (locals.item) { %><%= locals.item.name %><% } %>">
                 </div>
                 <div>
-                    <label for="img_name">Ścieżka obrazka:</label>
-                    <input type="text" name="img_name" id="img_name" value="<% if (locals.item) { %><%= locals.item.img_name %><% } %>">
+                    <label for="pic">Obrazek:</label>
+                    <input type="file" name="pic" id="pic">
                 </div>
                 <div>
                     <label for="developer">Deweloper:</label>

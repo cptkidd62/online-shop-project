@@ -3,6 +3,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
+const multer = require("multer");
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const bodyParser = require('body-parser');
 
 const dbrepo = require("./db");
 
@@ -18,6 +22,39 @@ app.use(cookieParser('sdfgh12735e68jgasdhjasduo113$%^&$#'));
 app.use(express.urlencoded({
     extended: true
 }));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+var fileStoreOptions = {};
+
+app.use(session({
+    store: new FileStore(fileStoreOptions),
+    resave: true,
+    saveUninitialized: true,
+    secret: 'keyboard cat'
+}));
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./static/img");
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, fileName)
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Allowed only .png, .jpg, .jpeg and .gif'));
+        }
+    }
+});
 
 function isUser(usr) {
     return usr.isuser;
@@ -61,10 +98,6 @@ function authorizeOrder() {
         console.log("Błąd autoryzacji - niewystarczające uprawnienia dostępu");
         res.redirect("/");
     }
-}
-
-function validateImg(img) {
-    return /^[^<>:;,?"*|/]+$/.test(img);
 }
 
 function validatePrice(price) {
@@ -258,15 +291,14 @@ app.get("/admin/edit", authorize("admin"), (req, res) => {
     res.render("edit-game", { user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
-app.post("/admin/edit", authorize("admin"), async (req, res) => {
+app.post("/admin/edit", authorize("admin"), upload.single("pic"), async (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
-    if (!req.body.name || !req.body.img_name || !req.body.developer || !req.body.description || !req.body.price || !req.body.year
-        || !validateImg(req.body.img_name) || !validatePrice(req.body.price) || !validateYear(req.body.year)) {
+    if (!req.body.name || !req.body.developer || !req.body.description || !req.body.price || !req.body.year
+        || !validatePrice(req.body.price) || !validateYear(req.body.year)) {
         var item = {
             name: req.body.name,
-            img_name: req.body.img_name,
             developer: req.body.developer,
             description: req.body.description,
             price: req.body.price,
@@ -275,7 +307,11 @@ app.post("/admin/edit", authorize("admin"), async (req, res) => {
         var msg = "Niepoprawne wartości w formularzu";
         res.render("edit-game", { user: req.signedCookies.user, item: item, msg: msg, cart: req.signedCookies.cart });
     } else {
-        await repo.createGame(req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
+        var img_name = "no-img.jpg";
+        if (req.file) {
+            img_name = req.file.filename;
+        }
+        await repo.createGame(req.body.name, img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
         res.redirect("/admin");
     }
 });
@@ -288,15 +324,14 @@ app.get("/admin/edit/:id", authorize("admin"), async (req, res) => {
     res.render("edit-game", { item: data, user: req.signedCookies.user, cart: req.signedCookies.cart });
 });
 
-app.post("/admin/edit/:id", authorize("admin"), async (req, res) => {
+app.post("/admin/edit/:id", authorize("admin"), upload.single("pic"), async (req, res) => {
     if (!req.signedCookies.user) {
         res.redirect("/");
     }
-    if (!req.body.name || !req.body.img_name || !req.body.developer || !req.body.description || !req.body.price || !req.body.year
-        || !validateImg(req.body.img_name) || !validatePrice(req.body.price) || !validateYear(req.body.year)) {
+    if (!req.body.name || !req.body.developer || !req.body.description || !req.body.price || !req.body.year
+        || !validatePrice(req.body.price) || !validateYear(req.body.year)) {
         var item = {
             name: req.body.name,
-            img_name: req.body.img_name,
             developer: req.body.developer,
             description: req.body.description,
             price: req.body.price,
@@ -306,7 +341,11 @@ app.post("/admin/edit/:id", authorize("admin"), async (req, res) => {
         res.render("edit-game", { user: req.signedCookies.user, item: item, msg: msg, cart: req.signedCookies.cart });
     } else {
         try {
-            await repo.updateGame(Number(req.params.id), req.body.name, req.body.img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
+            var img_name = "";
+            if (req.file) {
+                img_name = req.file.filename;
+            }
+            await repo.updateGame(Number(req.params.id), req.body.name, img_name, req.body.developer, req.body.description, req.body.price, req.body.year);
         } catch (e) {
             console.log("Update error");
         }

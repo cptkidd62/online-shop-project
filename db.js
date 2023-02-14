@@ -45,6 +45,10 @@ exports.Repository = class Repository {
     }
 
     async updateGame(id, name, img_name, developer, description, price, year) {
+        if (img_name == "") {
+            var data = await this.pool.query("SELECT img_name FROM games WHERE id = $1", [id]);
+            img_name = data.rows[0].img_name;
+        }
         await this.pool.query("UPDATE games SET name = $1, img_name = $2, developer = $3, description = $4, price = $5, year = $6 WHERE id = $7",
             [name, img_name, developer, description, price, year, id]);
     }
